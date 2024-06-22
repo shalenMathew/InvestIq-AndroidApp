@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -8,7 +10,10 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
+
+
 android {
+
     namespace = "com.example.investiq"
     compileSdk = 34
 
@@ -23,6 +28,15 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val properties = Properties().apply {
+            load(project.rootProject.file("local.properties").inputStream())
+        }
+
+        val apiKey = properties.getProperty("apiKey")
+
+        buildConfigField("String", "API_KEY", apiKey)
+
     }
 
     buildTypes {
@@ -33,6 +47,12 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+        debug{
+            applicationIdSuffix=".debug"
+            isDebuggable = true
+        }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -43,6 +63,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -63,7 +84,8 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+    implementation ("androidx.compose.material:material:1.4.0-alpha02")
+    implementation(libs.androidx.material3.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -109,7 +131,10 @@ dependencies {
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
 
 
-    // Swipe
+    // Swipe item
     implementation ("me.saket.swipe:swipe:1.3.0")
+
+    //lottie
+    implementation("com.airbnb.android:lottie-compose:6.3.0")
 
 }

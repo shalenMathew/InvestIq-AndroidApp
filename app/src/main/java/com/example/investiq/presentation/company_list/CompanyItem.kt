@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Star
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +34,7 @@ import me.saket.swipe.SwipeableActionsBox
 
 @Composable
 fun CompanyItem(
+    modifier: Modifier,
     company:CompanyListing,
     onClick:()->Unit
 ){
@@ -62,7 +63,7 @@ fun CompanyItem(
     ) {
 
         Box(
-            modifier= Modifier
+            modifier= modifier
                 .padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
                 .clip(RoundedCornerShape(18.dp))
                 .background(color = Color.Black)
@@ -86,7 +87,7 @@ fun CompanyItem(
                         color = Color.White,
                         fontSize = 18.sp,
                         modifier = Modifier.padding(top=12.dp, start=15.dp, end = 10.dp),
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.SemiBold,
                         fontFamily = poppins,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis)
@@ -106,12 +107,7 @@ fun CompanyItem(
                     fontFamily = poppins,
                     fontWeight = FontWeight.Light,
                     modifier=Modifier.padding(end=15.dp))
-
-
             }
-
         }
-
     }
-
 }

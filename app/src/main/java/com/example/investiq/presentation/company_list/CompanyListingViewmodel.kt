@@ -38,9 +38,9 @@ var state by mutableStateOf(CompanyListingState())
                     is Resource.Success->{
 
                         state = if (it.data.isNullOrEmpty()){
-                            state.copy(error="The list is empty")
+                            state.copy(error="The list is empty, message from viewmodel")
                         }else{
-                            state.copy(companyList = it.data)
+                            state.copy(companyList = it.data, error = "")
                         }
 
                     }

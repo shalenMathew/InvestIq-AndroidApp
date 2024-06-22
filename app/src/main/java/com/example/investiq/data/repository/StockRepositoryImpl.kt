@@ -1,5 +1,6 @@
 package com.example.investiq.data.repository
 
+import android.util.Log
 import com.example.investiq.data.csv.CSVParser
 import com.example.investiq.data.local.StockDatabase
 import com.example.investiq.data.mappers.toCompanyListing
@@ -29,18 +30,28 @@ class StockRepositoryImpl @Inject constructor(
 
         return flow {
             emit(Resource.Loading())
+
             // taking data from cache
             val localListings = dao.searchForCompany(query)
+
             emit(Resource.Success(localListings.map {
                 it.toCompanyListing()
             }))
 
             // checking if db is empty ...
             val isDbEmpty = localListings.isEmpty() && query.isBlank()
-            val shouldJustLoadFromCache = !isDbEmpty && !fetchFromRemote
+            val shouldJustLoadFromCache = !isDbEmpty && !fetchFromRemote // if db is not empty and and not fetchFromRemote we will
+                // just get data from cache one issue that can arise from this is we can only make limited call from this api
+            // once the limit is over api will return empty list  instead of an error message indicating that limit it is over
+
+            // now if the db is empty it wont get from cache anymore as it will skip the below condition
+
+            Log.d("TAG", "fetch from remote - $fetchFromRemote ")
+            Log.d("TAG","shouldJustLoadFromCache - $shouldJustLoadFromCache")
 
             if (shouldJustLoadFromCache){
                 emit(Resource.Loading(false))
+                Log.d("TAG", "data from db ")
                 return@flow
                 // return no need to fetch from api if the cache is not empty
             }
@@ -57,12 +68,17 @@ class StockRepositoryImpl @Inject constructor(
                 e.printStackTrace()
                 emit(Resource.Error(e.message ?: "HTTP error"))
                 null
+            }catch (e:Exception){
+              e.printStackTrace()
+              null
             }
 
 
             // now caching the data we gotten from our api
 
             remoteListings?.let { listOfcompanyListing->
+
+                Log.d("TAG", "data from remote ")
 
                 dao.deleteAllCompanyListings()
                 // here down our insert fun in from data layer so should only take model from data layer
