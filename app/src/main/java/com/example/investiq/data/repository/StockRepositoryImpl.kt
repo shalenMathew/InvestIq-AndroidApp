@@ -9,6 +9,7 @@ import com.example.investiq.data.remote.StockApi
 import com.example.investiq.domain.model.CompanyListing
 import com.example.investiq.domain.respository.StockRepository
 import com.example.investiq.util.Resource
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -57,6 +58,7 @@ class StockRepositoryImpl @Inject constructor(
             }
 
           val remoteListings =  try {
+
                 val remoteListing = stockApi.getStockList()
                 companyListingParser.parse(remoteListing.byteStream())
 

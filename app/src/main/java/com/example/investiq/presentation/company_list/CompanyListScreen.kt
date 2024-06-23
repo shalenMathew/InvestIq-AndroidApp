@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -28,12 +29,15 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -61,6 +65,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.investiq.R
+import com.example.investiq.domain.model.CompanyListing
 import com.example.investiq.ui.theme.PurpleGrey40
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -158,33 +163,6 @@ fun CompanyListScreen(
         .pullRefresh(pullRefreshState)
          ) {
 
-//            BasicTextField(value = , onValueChange = ){
-//
-//            }
-
-//            OutlinedTextField(
-//                value = state.searchQuery, // initial value
-//                onValueChange ={
-//                    // will be triggered when user input some string
-//                    viewmodel.onEvent(CompanyListingEvent.OnSearchQueryChanged(it))
-//                },
-//                modifier = Modifier
-//                    .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
-//                    .fillMaxWidth(),
-//                placeholder = {
-//                    Text(text = "Search...")
-//                },
-//                maxLines = 1,
-//                singleLine = true,
-//                colors = OutlinedTextFieldDefaults.colors(
-//                    focusedPlaceholderColor = Color.Black,
-//                    focusedBorderColor=Color.Black,
-//                    unfocusedBorderColor= PurpleGrey40,
-//                    unfocusedPlaceholderColor = PurpleGrey40,
-//                    focusedTextColor = Color.Black,
-//                ))
-
-
 
             if(state.error.isNotEmpty() && state.companyList.isEmpty()){
                 
@@ -194,7 +172,7 @@ fun CompanyListScreen(
                    .wrapContentWidth()
                    .wrapContentHeight()
                    .padding(10.dp)
-                   .align(Alignment.TopCenter)
+                   .align(Alignment.Center)
                    , contentAlignment = Alignment.Center
                ){
                    Text(text = state.error,
@@ -206,6 +184,25 @@ fun CompanyListScreen(
             }
 
                 Column(modifier=Modifier.fillMaxSize()){
+
+                    OutlinedTextField(  value = state.searchQuery ,
+                        onValueChange = {value->
+                            viewmodel.onEvent(CompanyListingEvent.OnSearchQueryChanged(value))
+                        },
+                        modifier = Modifier
+                            .padding(bottom = 15.dp, start = 16.dp, end = 16.dp, top = 10.dp)
+                            .fillMaxWidth(),
+                        maxLines = 1,
+                        placeholder = { Text(text = "Search...")}
+                    , colors = TextFieldDefaults. outlinedTextFieldColors(
+                        focusedBorderColor = Color.Black,
+                        unfocusedBorderColor = PurpleGrey40 ,
+                       placeholderColor = Color.Black,
+
+                    ),
+                        shape = MaterialTheme.shapes.large)
+
+
                     LazyColumn(modifier=Modifier.fillMaxSize()) {
                         itemsIndexed(state.companyList){ index, companyItem ->
 
