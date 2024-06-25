@@ -30,7 +30,6 @@ var state by mutableStateOf(CompanyListingState())
         fetchFromRemote:Boolean = false
     ){
         viewModelScope.launch {
-
             stockRepository.getCompanyListing(fetchFromRemote, query).collect{
 
                 when(it){
@@ -56,7 +55,6 @@ var state by mutableStateOf(CompanyListingState())
                 }
 
             }
-
         }
     }
 

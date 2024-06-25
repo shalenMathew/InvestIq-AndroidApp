@@ -3,13 +3,15 @@ package com.example.investiq.data.repository
 import android.util.Log
 import com.example.investiq.data.csv.CSVParser
 import com.example.investiq.data.local.StockDatabase
+import com.example.investiq.data.mappers.toCompanyInfo
 import com.example.investiq.data.mappers.toCompanyListing
 import com.example.investiq.data.mappers.toCompanyListingEntity
 import com.example.investiq.data.remote.StockApi
+import com.example.investiq.domain.model.CompanyInfo
 import com.example.investiq.domain.model.CompanyListing
+import com.example.investiq.domain.model.IntradayInfo
 import com.example.investiq.domain.respository.StockRepository
 import com.example.investiq.util.Resource
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -19,7 +21,8 @@ import javax.inject.Inject
 class StockRepositoryImpl @Inject constructor(
     private val stockApi: StockApi,
     private val stockDb:StockDatabase,
-    private val companyListingParser:CSVParser<CompanyListing>
+    private val companyListingParser:CSVParser<CompanyListing>,
+    private val intraDayInfoParser:CSVParser<IntradayInfo>
 ):StockRepository {
 
     private val dao = stockDb.dao
@@ -100,5 +103,32 @@ class StockRepositoryImpl @Inject constructor(
             }
         }
 
+    }
+
+    override suspend fun getIntraDayInfo(symbol: String): Resource<List<IntradayInfo>> {
+
+
+        return  try {
+            val intraDayResponse = stockApi.getIntradayInfo(symbol)
+            val intraDayInfoResult = intraDayInfoParser.parse(intraDayResponse.byteStream())
+
+            Resource.Success(data = intraDayInfoResult )
+
+        }catch (e:Exception){
+            e.printStackTrace()
+            Resource.Error(message = e.message?: "An unknown error occured")
+        }
+
+    }
+
+    override suspend fun getCompanyInfo(symbol: String): Resource<CompanyInfo> {
+        try {
+            val companyInfoResult = stockApi.getCompanyInfo(symbol)
+
+            return Resource.Success(data = companyInfoResult.toCompanyInfo())
+
+        }catch (e:Exception){
+            return Resource.Error(message = e.message.toString())
+        }
     }
 }

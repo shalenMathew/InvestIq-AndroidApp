@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -68,10 +69,11 @@ fun CompanyItem(
                 .clip(RoundedCornerShape(18.dp))
                 .background(color = Color.Black)
                 .fillMaxWidth()
-                .wrapContentHeight()
+                .height(70.dp)
                 .clickable {
                     onClick()
-                }
+                },
+            contentAlignment = Alignment.Center
         ){
 
             Row(
@@ -83,21 +85,16 @@ fun CompanyItem(
             ){
 
                 Column(modifier=Modifier.weight(1f)) {
+
                     Text(text = company.name,
                         color = Color.White,
                         fontSize = 18.sp,
-                        modifier = Modifier.padding(top=12.dp, start=15.dp, end = 10.dp),
+                        modifier = Modifier.padding(top=12.dp, start=15.dp, end = 10.dp, bottom = 12.dp),
                         fontWeight = FontWeight.SemiBold,
                         fontFamily = poppins,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis)
 
-                    Text(text = "(${company.symbol})",
-                        color = Color.White,
-                        fontSize = 14.sp,
-                        fontFamily = poppins,
-                        fontWeight = FontWeight.Light,
-                        modifier = Modifier.padding(top=8.dp, start=15.dp, bottom = 12.dp))
 
                 }
 

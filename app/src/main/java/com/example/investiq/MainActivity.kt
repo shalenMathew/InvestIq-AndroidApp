@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.investiq.presentation.company_list.NavGraphs
+import com.example.investiq.presentation.company_list.sample
 import com.example.investiq.ui.theme.InvestIQTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -39,15 +40,13 @@ class MainActivity : ComponentActivity() {
 
 //                SetBarColor(color = Color.Transparent)
 
-                Image(painter = painterResource(id = R.drawable.stockback),
-                    contentDescription ="Background",
-                    contentScale = ContentScale.Crop)
-
-                Surface(modifier = Modifier.fillMaxSize()
+                Surface(modifier = Modifier
+                    .fillMaxSize()
                     .background(color = Color.White)
-                    .padding(top=45.dp),
+                    .padding(top = 45.dp),
                     color = Color.Transparent) {
                     DestinationsNavHost(navGraph = NavGraphs.root)
+//                    sample()
                 }
 
 
