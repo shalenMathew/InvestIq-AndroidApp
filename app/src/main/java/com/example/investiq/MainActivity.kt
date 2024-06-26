@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.investiq.presentation.company_list.NavGraphs
-import com.example.investiq.presentation.company_list.sample
+
 import com.example.investiq.ui.theme.InvestIQTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.DestinationsNavHost

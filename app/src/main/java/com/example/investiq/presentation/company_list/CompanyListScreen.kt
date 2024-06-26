@@ -4,12 +4,19 @@ import android.graphics.Paint.Align
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -50,8 +57,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
@@ -78,6 +87,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.investiq.R
 import com.example.investiq.domain.model.CompanyListing
+import com.example.investiq.ui.theme.Orange
 import com.example.investiq.ui.theme.PurpleGrey40
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -93,6 +103,15 @@ fun CompanyListScreen(
     navigator: DestinationsNavigator,
     viewmodel:CompanyListingViewmodel = hiltViewModel(),
 ){
+
+
+    var clickedSearch by remember {
+        mutableStateOf(false)
+    }
+
+    val progress by animateFloatAsState(targetValue = if(clickedSearch) 1f else 0f, label = "", animationSpec = tween(2000))
+
+
 
 
     val state = viewmodel.state
@@ -162,7 +181,7 @@ fun CompanyListScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFFD5F11)) // Orange color
+                .background(Orange) // Orange color
                 .graphicsLayer {
                     translationY = animatedOffset.toPx()
                 }
@@ -214,16 +233,20 @@ fun CompanyListScreen(
                                        end = 16.dp,
                                        top = 10.dp
                                    )
-                                   .fillMaxWidth(),
+                                   .fillMaxWidth()
+                                   .onFocusChanged { focusState ->
+                                       clickedSearch = focusState.isFocused
+                                   }
+                                   .animatedBorder({ progress }, Orange, Color.Black),
                                maxLines = 1,
                                placeholder = { Text(text = "Search...")}
                                , colors = TextFieldDefaults. outlinedTextFieldColors(
-                                   focusedBorderColor = Color.Black,
+                                   focusedBorderColor =Color.Transparent,
                                    unfocusedBorderColor = PurpleGrey40 ,
                                    placeholderColor = Color.Black,
+                                   disabledPlaceholderColor = Color.Yellow),
+                               shape = MaterialTheme.shapes.extraLarge)
 
-                                   ),
-                               shape = MaterialTheme.shapes.large)
                        }
 
                     }
@@ -245,11 +268,6 @@ fun CompanyListScreen(
                         }
                     }
                 }
-
-//        PullRefreshIndicator(
-//            refreshing = viewmodel.state.isRefreshing,
-//            state = pullRefreshState,
-//            modifier=Modifier.align(Alignment.TopCenter))
 
         CustomIndicator(viewmodel.state.isRefreshing,pullRefreshState)
 
@@ -335,68 +353,71 @@ fun AnimatedLoadingText() {
     )
 }
 
-//fun Modifier.animatedBorder(provideProgress: () -> Float, colorFocused: Color, colorUnfocused: Color) = this.drawWithCache {
-//    val width = size.width
-//    val height = size.height
-//
-//    val shape = CircleShape
-//
-//    // Only works with RoundedCornerShape...
-//    val outline = shape.createOutline(size, layoutDirection, this) as Outline.Rounded
-//
-//    // ... correction: Only works with same corner sizes everywhere
-//    val radius = outline.roundRect.topLeftCornerRadius.x
-//    val diameter = 2 * radius
-//
-//    // Clockwise path
-//    val pathCw = Path()
-//
-//    // Start top center
-//    pathCw.moveTo(width / 2, 0f)
-//
-//    // Line to right
-//    pathCw.lineTo(width - radius, 0f)
-//
-//    // Top right corner
-//    pathCw.arcTo(Rect(width - diameter, 0f, width, diameter), -90f, 90f, false)
-//
-//    // Right edge
-//    pathCw.lineTo(width, height - radius)
-//
-//    // Bottom right corner
-//    pathCw.arcTo(Rect(width - diameter, height - diameter, width, height), 0f, 90f, false)
-//
-//    // Line to bottom center
-//    pathCw.lineTo(width / 2, height)
-//
-//    // As above, but mirrored horizontally
-//    val pathCcw = Path()
-//    pathCcw.moveTo(width / 2, 0f)
-//    pathCcw.lineTo(radius, 0f)
-//    pathCcw.arcTo(Rect(0f, 0f, diameter, diameter), -90f, -90f, false)
-//    pathCcw.lineTo(0f, height - radius)
-//    pathCcw.arcTo(Rect(0f, height - diameter, diameter, height), 180f, -90f, false)
-//    pathCcw.lineTo(width / 2, height)
-//
-//    val pmCw = PathMeasure().apply {
-//        setPath(pathCw, false)
-//    }
-//    val pmCcw = PathMeasure().apply {
-//        setPath(pathCcw, false)
-//    }
-//
-//    fun DrawScope.drawIndicator(progress: Float, pathMeasure: PathMeasure) {
-//        val subPath = Path()
-//        pathMeasure.getSegment(0f, pathMeasure.length * EaseOut.transform(progress), subPath)
-//        drawPath(subPath, colorFocused, style = Stroke(3.dp.toPx(), cap = StrokeCap.Round))
-//    }
-//
-//    onDrawBehind {
-//        // Draw the shape
-//        drawOutline(outline, colorUnfocused, style = Stroke(2.dp.toPx()))
-//
-//        // Draw the indicators
-//        drawIndicator(provideProgress(), pmCw)
-//        drawIndicator(provideProgress(), pmCcw)
-//    }
-//}
+fun Modifier.animatedBorder
+            (provideProgress: () -> Float,
+             colorFocused: Color,
+             colorUnfocused: Color) = this.drawWithCache {
+    val width = size.width
+    val height = size.height
+
+    val shape = CircleShape
+
+    // Only works with RoundedCornerShape...
+    val outline = shape.createOutline(size, layoutDirection, this) as Outline.Rounded
+
+    // ... correction: Only works with same corner sizes everywhere
+    val radius = outline.roundRect.topLeftCornerRadius.x
+    val diameter = 2 * radius
+
+    // Clockwise path
+    val pathCw = Path()
+
+    // Start top center
+    pathCw.moveTo(width / 2, 0f)
+
+    // Line to right
+    pathCw.lineTo(width - radius, 0f)
+
+    // Top right corner
+    pathCw.arcTo(Rect(width - diameter, 0f, width, diameter), -90f, 90f, false)
+
+    // Right edge
+    pathCw.lineTo(width, height - radius)
+
+    // Bottom right corner
+    pathCw.arcTo(Rect(width - diameter, height - diameter, width, height), 0f, 90f, false)
+
+    // Line to bottom center
+    pathCw.lineTo(width / 2, height)
+
+    // As above, but mirrored horizontally
+    val pathCcw = Path()
+    pathCcw.moveTo(width / 2, 0f)
+    pathCcw.lineTo(radius, 0f)
+    pathCcw.arcTo(Rect(0f, 0f, diameter, diameter), -90f, -90f, false)
+    pathCcw.lineTo(0f, height - radius)
+    pathCcw.arcTo(Rect(0f, height - diameter, diameter, height), 180f, -90f, false)
+    pathCcw.lineTo(width / 2, height)
+
+    val pmCw = PathMeasure().apply {
+        setPath(pathCw, false)
+    }
+    val pmCcw = PathMeasure().apply {
+        setPath(pathCcw, false)
+    }
+
+    fun DrawScope.drawIndicator(progress: Float, pathMeasure: PathMeasure) {
+        val subPath = Path()
+        pathMeasure.getSegment(0f, pathMeasure.length * EaseOut.transform(progress), subPath)
+        drawPath(subPath, colorFocused, style = Stroke(3.dp.toPx(), cap = StrokeCap.Round))
+    }
+
+    onDrawBehind {
+        // Draw the shape
+        drawOutline(outline, colorUnfocused, style = Stroke(2.dp.toPx()))
+
+        // Draw the indicators
+        drawIndicator(provideProgress(), pmCw)
+        drawIndicator(provideProgress(), pmCcw)
+    }
+}
