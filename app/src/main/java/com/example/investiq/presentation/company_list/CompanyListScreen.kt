@@ -111,9 +111,6 @@ fun CompanyListScreen(
 
     val progress by animateFloatAsState(targetValue = if(clickedSearch) 1f else 0f, label = "", animationSpec = tween(2000))
 
-
-
-
     val state = viewmodel.state
 
     val  pullRefreshState = rememberPullRefreshState(

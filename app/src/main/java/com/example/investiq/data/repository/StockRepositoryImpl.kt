@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 class StockRepositoryImpl @Inject constructor(
@@ -71,10 +72,15 @@ class StockRepositoryImpl @Inject constructor(
                 null
             } catch (e: HttpException) {
                 e.printStackTrace()
-                emit(Resource.Error(e.message ?: "HTTP error"))
+                emit(Resource.Error(e.message ?: "unknown error occurred"))
                 null
-            }catch (e:Exception){
+            } catch (e:UnknownHostException){
               e.printStackTrace()
+              emit(Resource.Error("No network connection...Try to refresh..."))
+              null
+          } catch (e:Exception){
+              e.printStackTrace()
+              emit(Resource.Error(e.message ?: "unknown error occurred"))
               null
             }
 
