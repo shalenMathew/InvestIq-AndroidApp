@@ -23,9 +23,14 @@ class CompanyInfoViewModel @Inject constructor(
     var state:CompanyInfoState by mutableStateOf(CompanyInfoState())
 
     init {
-        viewModelScope.launch {
+        getCompanyInfo()
+    }
 
+   private fun getCompanyInfo(){
+
+        viewModelScope.launch {
             val symbol = savedStateHandle.get<String>("symbol") ?: return@launch
+
             state = state.copy(isLoading = true)
 
 //            val companyInfo = stockRepository.getCompanyInfo(symbol)
@@ -36,20 +41,29 @@ class CompanyInfoViewModel @Inject constructor(
 
             val companyInfoResult =  async {stockRepository.getCompanyInfo(symbol)}
             val intraDayInfoResult = async {stockRepository.getIntraDayInfo(symbol)}
+            val stockPrice = async { stockRepository.getCompanyPrice(symbol) }
 
             when(val result = companyInfoResult.await()){
-                is Resource.Error -> state=state.copy(isLoading = false, error = result.message)
-                is Resource.Loading -> state= state.copy(isLoading = true)
+                is Resource.Error -> state=state.copy(isLoading = false, error = result.message, companyDetail = null)
+                is Resource.Loading -> state= state.copy(isLoading = true, companyDetail = null, error = null)
                 is Resource.Success -> {
-                    state = state.copy(companyInfo = result.data, isLoading = false, error = "" )
+                    state = state.copy(companyDetail = result.data, isLoading = false, error = null)
                 }
             }
 
             when(val result = intraDayInfoResult.await()){
-                is Resource.Error -> state=state.copy(isLoading = false, error = result.message)
-                is Resource.Loading -> state= state.copy(isLoading = true)
+                is Resource.Error -> state=state.copy(isLoading = false, error = result.message, companyDetail = null)
+                is Resource.Loading -> state= state.copy(isLoading = true, companyDetail = null, error = null)
                 is Resource.Success -> {
-                    state = state.copy(intraDayInfo = result.data ?: emptyList(), isLoading = false, error = "" )
+                    state = state.copy(intraDayInfo = result.data ?: emptyList(), isLoading = false, error = null )
+                }
+            }
+
+            when(val result = stockPrice.await() ){
+                is Resource.Error -> state=state.copy(isLoading = false, error = result.message,companyDetail = null)
+                is Resource.Loading -> state= state.copy(isLoading = true, companyDetail = null, error = null)
+                is Resource.Success -> {
+                    state = state.copy(stockPrice= result.data  , isLoading = false, error = null )
                 }
             }
 

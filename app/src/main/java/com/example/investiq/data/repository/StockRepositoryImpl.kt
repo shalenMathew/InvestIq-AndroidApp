@@ -1,15 +1,21 @@
 package com.example.investiq.data.repository
 
+import android.os.Build
 import android.util.Log
-import com.example.investiq.data.csv.CSVParser
+import androidx.annotation.RequiresApi
 import com.example.investiq.data.local.StockDatabase
-import com.example.investiq.data.mappers.toCompanyInfo
-import com.example.investiq.data.mappers.toCompanyListing
+import com.example.investiq.data.mappers.toCompanyDetail
+
+import com.example.investiq.data.mappers.toCompanyItem
 import com.example.investiq.data.mappers.toCompanyListingEntity
+import com.example.investiq.data.mappers.toCompanyQuote
+import com.example.investiq.data.mappers.toIntraDayInfo
 import com.example.investiq.data.remote.StockApi
-import com.example.investiq.domain.model.CompanyInfo
-import com.example.investiq.domain.model.CompanyListing
-import com.example.investiq.domain.model.IntradayInfo
+import com.example.investiq.data.remote.dto.CompanyItemDto
+import com.example.investiq.domain.model.CompanyDetail
+import com.example.investiq.domain.model.CompanyItem
+import com.example.investiq.domain.model.CompanyQuote
+import com.example.investiq.domain.model.IntraDayInfo
 import com.example.investiq.domain.respository.StockRepository
 import com.example.investiq.util.Resource
 import kotlinx.coroutines.flow.Flow
@@ -17,13 +23,12 @@ import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.UnknownHostException
+import java.time.LocalDate
 import javax.inject.Inject
 
 class StockRepositoryImpl @Inject constructor(
     private val stockApi: StockApi,
     private val stockDb:StockDatabase,
-    private val companyListingParser:CSVParser<CompanyListing>,
-    private val intraDayInfoParser:CSVParser<IntradayInfo>
 ):StockRepository {
 
     private val dao = stockDb.dao
@@ -31,17 +36,13 @@ class StockRepositoryImpl @Inject constructor(
     override suspend fun getCompanyListing(
         fetchFromRemote: Boolean,
         query: String
-    ):Flow<Resource<List<CompanyListing>>> {
+    ):Flow<Resource<List<CompanyItem>>> {
 
         return flow {
-            emit(Resource.Loading())
+            emit(Resource.Loading(isLoading = true))
 
             // taking data from cache
             val localListings = dao.searchForCompany(query)
-
-            emit(Resource.Success(localListings.map {
-                it.toCompanyListing()
-            }))
 
             // checking if db is empty ...
             val isDbEmpty = localListings.isEmpty() && query.isBlank()
@@ -51,20 +52,29 @@ class StockRepositoryImpl @Inject constructor(
 
             // now if the db is empty it wont get from cache anymore as it will skip the below condition
 
-            Log.d("TAG", "fetch from remote - $fetchFromRemote ")
-            Log.d("TAG","shouldJustLoadFromCache - $shouldJustLoadFromCache")
+//            Log.d("TAG_from_StockRepoImpl", "fetch from remote - $fetchFromRemote ")
+//            Log.d("TAG_from_StockRepoImpl","shouldJustLoadFromCache - $shouldJustLoadFromCache")
 
             if (shouldJustLoadFromCache){
                 emit(Resource.Loading(false))
                 Log.d("TAG", "data from db ")
+
+                emit(Resource.Success(localListings.map {
+                    it.toCompanyItem()
+                }))
+
                 return@flow
                 // return no need to fetch from api if the cache is not empty
             }
 
           val remoteListings =  try {
 
-                val remoteListing = stockApi.getStockList()
-                companyListingParser.parse(remoteListing.byteStream())
+              // old alha vantage api
+//                val remoteListing = stockApi.getStockList()
+//                companyListingParser.parse(remoteListing.byteStream())
+
+             stockApi.getCompanyList()
+
 
             } catch(e: IOException) {
                 e.printStackTrace()
@@ -89,52 +99,73 @@ class StockRepositoryImpl @Inject constructor(
 
             remoteListings?.let { listOfcompanyListing->
 
-                Log.d("TAG", "data from remote ")
+                val sampleList = mutableListOf<CompanyItemDto>()
 
                 dao.deleteAllCompanyListings()
                 // here down our insert fun in from data layer so should only take model from data layer
+
+           listOfcompanyListing.filter {
+               it.exchangeShortName== "NASDAQ"
+           }.forEach { item->
+                   sampleList.add(item)
+           }
+
                 dao.insertCompanyListing(
-                    listOfcompanyListing.map {
-                        it.toCompanyListingEntity()
-                    }
+                sampleList.map {
+                    it.toCompanyItem().toCompanyListingEntity()
+                }
                 )
 
                 emit(Resource.Success(
                     dao.searchForCompany("").map {
-                        it.toCompanyListing()
+                        it.toCompanyItem()
                     }
                 ))
 
                 emit(Resource.Loading(false))
-            }
+
+            }?:run { Log.d("stock_repo_impl","remote listing is null") }
         }
 
     }
 
-    override suspend fun getIntraDayInfo(symbol: String): Resource<List<IntradayInfo>> {
 
 
-        return  try {
-            val intraDayResponse = stockApi.getIntradayInfo(symbol)
-            val intraDayInfoResult = intraDayInfoParser.parse(intraDayResponse.byteStream())
+    @RequiresApi(Build.VERSION_CODES.O)
+    override suspend fun getIntraDayInfo(symbol: String): Resource<List<IntraDayInfo>> {
 
-            Resource.Success(data = intraDayInfoResult )
+        return try{
+            val from = LocalDate.now().minusDays(7).toString()
+            val to = LocalDate.now().minusDays(3).toString()
+            Log.d("from",from)
+            Log.d("to",to)
+            val intraDayInfoResult = stockApi.getIntraDayInfo(symbol=symbol, from =from , to = to)
+
+            Resource.Success(intraDayInfoResult.map { it.toIntraDayInfo() })
 
         }catch (e:Exception){
-            e.printStackTrace()
-            Resource.Error(message = e.message?: "An unknown error occured")
+            return Resource.Error(message = e.message.toString())
         }
 
     }
 
-    override suspend fun getCompanyInfo(symbol: String): Resource<CompanyInfo> {
+    override suspend fun getCompanyInfo(symbol: String): Resource<CompanyDetail> {
         try {
-            val companyInfoResult = stockApi.getCompanyInfo(symbol)
-
-            return Resource.Success(data = companyInfoResult.toCompanyInfo())
+            val companyDetailResult = stockApi.getCompanyInfo(symbol)
+            return Resource.Success(data = companyDetailResult[0].toCompanyDetail())
 
         }catch (e:Exception){
             return Resource.Error(message = e.message.toString())
         }
     }
+
+    override suspend fun getCompanyPrice(symbol: String): Resource<CompanyQuote> {
+      return  try {
+            val stockPriceResult = stockApi.getStockPrice(symbol)
+             Resource.Success(data = stockPriceResult[0].toCompanyQuote())
+        }catch (e:Exception){
+           Resource.Error(message = e.message.toString())
+      }
+    }
+
 }

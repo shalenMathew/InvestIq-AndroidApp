@@ -20,14 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.investiq.domain.model.CompanyListing
+import com.example.investiq.domain.model.CompanyItem
+import com.example.investiq.ui.theme.Gold
 import com.example.investiq.ui.theme.PurpleGrey40
-import com.example.investiq.ui.theme.PurpleGrey80
 import com.example.investiq.ui.theme.poppins
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
@@ -36,7 +35,7 @@ import me.saket.swipe.SwipeableActionsBox
 @Composable
 fun CompanyItem(
     modifier: Modifier,
-    company:CompanyListing,
+    company:CompanyItem,
     onClick:()->Unit
 ){
 
@@ -69,7 +68,7 @@ fun CompanyItem(
                 .clip(RoundedCornerShape(18.dp))
                 .background(color = Color.Black)
                 .fillMaxWidth()
-                .height(70.dp)
+                .wrapContentHeight()
                 .clickable {
                     onClick()
                 },
@@ -80,8 +79,7 @@ fun CompanyItem(
                 modifier= Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
-                horizontalArrangement = Arrangement.SpaceBetween
-                , verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically
             ){
 
                 Column(modifier=Modifier.weight(1f)) {
@@ -89,8 +87,17 @@ fun CompanyItem(
                     Text(text = company.name,
                         color = Color.White,
                         fontSize = 18.sp,
-                        modifier = Modifier.padding(top=12.dp, start=15.dp, end = 10.dp, bottom = 12.dp),
+                        modifier = Modifier.padding(top=15.dp, start=15.dp, end = 10.dp, bottom = 2.dp),
                         fontWeight = FontWeight.SemiBold,
+                        fontFamily = poppins,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis)
+
+                    Text(text = company.symbol,
+                        color = Color.White,
+                        fontSize = 15.sp,
+                        modifier = Modifier.padding(top=2.dp, start=15.dp, end = 10.dp, bottom = 15.dp),
+                        fontWeight = FontWeight.Medium,
                         fontFamily = poppins,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis)
@@ -98,12 +105,23 @@ fun CompanyItem(
 
                 }
 
-                Text(text = company.exchange,
-                    color = Color.White,
-                    fontSize = 12.sp,
-                    fontFamily = poppins,
-                    fontWeight = FontWeight.Light,
-                    modifier=Modifier.padding(end=15.dp))
+                Column {
+                    Text(text = "$ " + company.price,
+                        color = Gold,
+                        fontSize = 18.sp,
+                        fontFamily = poppins,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier=Modifier.padding(end=15.dp, start = 12.dp, bottom = 2.dp))
+
+                    Text(text = company.exchangeShortName,
+                        color = Color.White,
+                        fontSize = 12.sp,
+                        fontFamily = poppins,
+                        fontWeight = FontWeight.Medium,
+                        modifier=Modifier.padding(end=15.dp, start = 12.dp, top = 2.dp))
+
+                }
+
             }
         }
     }

@@ -23,7 +23,7 @@ object AppModule {
     @Singleton
   fun  provideStockApi():StockApi{
       return  Retrofit.Builder()
-          .baseUrl(Constant.BASE_URL)
+          .baseUrl(Constant.FMP_BASE_URL)
           .addConverterFactory(MoshiConverterFactory.create())
           .build()
           .create()
@@ -37,6 +37,7 @@ object AppModule {
             application
             ,StockDatabase::class.java
             ,"stock_database")
+            .fallbackToDestructiveMigration()
             .build()
 
     }

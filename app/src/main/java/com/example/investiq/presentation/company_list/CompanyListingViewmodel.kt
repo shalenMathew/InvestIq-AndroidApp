@@ -37,19 +37,17 @@ var state by mutableStateOf(CompanyListingState())
                     is Resource.Success->{
 
                         state = if (it.data.isNullOrEmpty()){
-                            state.copy(error="Nothing here to display... TRy to Refresh")
+                            state.copy(isLoading = false,error="Nothing here to display... TRy to Refresh")
                         }else{
-                            state.copy(companyList = it.data, error = "")
+                            state.copy(isLoading = false,companyList = it.data, error = "")
                         }
-
                     }
-
                     is Resource.Loading->{
-                        state=state.copy(isLoading = true)
+                        state=state.copy(isLoading = it.isLoading)
                     }
 
                     is Resource.Error-> {
-                        state=state.copy(error=it.message!!)
+                        state=state.copy(error=it.message!!, isLoading = false)
                     }
 
                 }

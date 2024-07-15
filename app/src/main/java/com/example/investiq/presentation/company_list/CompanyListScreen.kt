@@ -1,25 +1,14 @@
 package com.example.investiq.presentation.company_list
 
-import android.graphics.Paint.Align
-import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.EaseOut
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,26 +17,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -57,8 +42,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Rect
@@ -72,7 +55,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
@@ -86,11 +68,9 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.investiq.R
-import com.example.investiq.domain.model.CompanyListing
+import com.example.investiq.presentation.destinations.CompanyInfoScreenDestination
 import com.example.investiq.ui.theme.Orange
 import com.example.investiq.ui.theme.PurpleGrey40
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.delay
@@ -104,7 +84,6 @@ fun CompanyListScreen(
     viewmodel:CompanyListingViewmodel = hiltViewModel(),
 ){
 
-
     var clickedSearch by remember {
         mutableStateOf(false)
     }
@@ -116,7 +95,7 @@ fun CompanyListScreen(
     val  pullRefreshState = rememberPullRefreshState(
         refreshing = viewmodel.state.isRefreshing ,
         onRefresh = {
-            viewmodel.getCompanyListing(fetchFromRemote = false) // make it true later
+            viewmodel.getCompanyListing(fetchFromRemote = true) // make it true later
         })
 
  val willRefresh by remember {
@@ -191,26 +170,6 @@ fun CompanyListScreen(
         .pullRefresh(pullRefreshState)
          ) {
 
-
-            if(state.error.isNotEmpty() && state.companyList.isEmpty()){
-                
-               Box(modifier= Modifier
-                   .padding(12.dp)
-                   .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(5.dp))
-                   .wrapContentWidth()
-                   .wrapContentHeight()
-                   .padding(10.dp)
-                   .align(Alignment.Center)
-                   , contentAlignment = Alignment.Center
-               ){
-                   Text(text = state.error,
-                       color = Color.Black,
-                       fontSize = 15.sp
-                       )
-               }
-
-            }
-
                 Column(modifier=Modifier.fillMaxSize()){
 
                     Box(modifier = Modifier
@@ -261,10 +220,40 @@ fun CompanyListScreen(
                                             .toFloat()
                                     },
                                 company = companyItem,
-                                onClick = {} )
+                                onClick = {
+                                    navigator.navigate(CompanyInfoScreenDestination(companyItem.symbol))
+                                } )
                         }
                     }
                 }
+
+        if(state.error.isNotEmpty() && state.companyList.isEmpty()){
+
+            Box(modifier= Modifier
+                .padding(12.dp)
+                .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(5.dp))
+                .wrapContentWidth()
+                .wrapContentHeight()
+                .padding(10.dp)
+                .align(Alignment.Center)
+                , contentAlignment = Alignment.Center
+            ){
+                Text(text = state.error,
+                    color = Color.Black,
+                    fontSize = 15.sp
+                )
+            }
+
+        }
+
+        if (state.isLoading){
+            Box(modifier = Modifier
+                .wrapContentSize()
+                .background(color = Color.White)
+                .align(Alignment.Center)){
+                CircularProgressIndicator()
+            }
+        }
 
         CustomIndicator(viewmodel.state.isRefreshing,pullRefreshState)
 

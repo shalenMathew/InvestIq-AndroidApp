@@ -1,4 +1,4 @@
-import java.util.Properties
+ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -34,8 +34,10 @@ android {
         }
 
         val apiKey = properties.getProperty("apiKey")
+        val fmpApiKey = properties.getProperty("fmpApiKey")
 
         buildConfigField("String", "API_KEY", apiKey)
+        buildConfigField("String","FMP_API_KEY",fmpApiKey)
 
     }
 
@@ -84,7 +86,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation ("androidx.compose.material:material:1.4.0-alpha02")
+    implementation ("androidx.compose.material:material:1.6.8")
     implementation(libs.androidx.material3.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -136,5 +138,7 @@ dependencies {
 
     //lottie
     implementation("com.airbnb.android:lottie-compose:6.3.0")
+
+
 
 }

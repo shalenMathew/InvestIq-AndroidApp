@@ -5,9 +5,10 @@ import androidx.room.PrimaryKey
 
 
 @Entity
-data class CompanyListingEntity(
+data class CompanyItemEntity(
 val symbol:String,
 val name:String,
-val exchange:String,
+val exchangeShortName:String,
+val price:String,
 @PrimaryKey val id:Int?=null
 )
