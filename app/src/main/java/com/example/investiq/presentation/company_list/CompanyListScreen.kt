@@ -95,7 +95,7 @@ fun CompanyListScreen(
     val  pullRefreshState = rememberPullRefreshState(
         refreshing = viewmodel.state.isRefreshing ,
         onRefresh = {
-            viewmodel.getCompanyListing(fetchFromRemote = true) // make it true later
+            viewmodel.getCompanyListing(fetchFromRemote = false) // make it true later
         })
 
  val willRefresh by remember {

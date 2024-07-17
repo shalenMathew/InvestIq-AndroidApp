@@ -26,7 +26,6 @@ import kotlin.math.round
 import kotlin.math.roundToInt
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun StockChart(
     modifier: Modifier=Modifier,
@@ -60,14 +59,16 @@ fun StockChart(
     // setting up hour text in x direction
     Canvas(modifier = modifier) {
 
-        val chartWidth = (size.width-spacing)/infos.size
-        val spacerPerWeek = (size.width-spacing)/5
+
 
         val filteredInfos = infos.filterIndexed { index, _ ->
             Log.d("infos",infos[index].date.dayOfWeek.toString())
 
                 (index + 1) % 2 != 0
         }
+        val chartWidth = (size.width-spacing)/infos.size
+//        val spacerPerWeek = (size.width-spacing)/(infos.size-filteredInfos.size)
+        val spacerPerWeek = (size.width-spacing)/5
 
         (0 until filteredInfos.size).forEach(){
             val info=filteredInfos[it]
