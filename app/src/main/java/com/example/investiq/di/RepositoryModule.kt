@@ -16,6 +16,8 @@ abstract class RepositoryModule {
     // when using @Inject constructor with Interface implementation u need to use @Bind to tell hilt how to
     // instantiate the interface
 
+    // because an interface can have multiple classes implementing it, so hilt should know which class do u want the interface to instantiate with
+
 //    @Singleton
 //    @Binds
 //    abstract fun bindsCompanyListingParser(companyListingParser: CompanyListingParser):CSVParser<CompanyListing>
@@ -28,7 +30,5 @@ abstract class RepositoryModule {
     @Singleton
     @Binds
     abstract fun bindsStockRepoImpl(stockRepositoryImpl: StockRepositoryImpl):StockRepository
-
-
 
 }

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.example.investiq.ui.theme.Orange
 import com.example.investiq.ui.theme.poppins
 import com.ramcosta.composedestinations.annotation.Destination
 
@@ -164,7 +165,7 @@ val state = viewModel.state
        Text(text ="Fundamentals",
         modifier = Modifier
          .align(Alignment.Start)
-         .padding(start = 12.dp, top = 15.dp),
+         .padding(start = 12.dp, top = 20.dp),
         fontSize = 15.sp,
         fontWeight = FontWeight.SemiBold,
         fontFamily = poppins,
@@ -263,6 +264,7 @@ val state = viewModel.state
 
      }
     }
+
    }
   }
 
@@ -272,7 +274,7 @@ val state = viewModel.state
     .fillMaxSize()
     .background(color = Color.Black), contentAlignment = Alignment.Center){
     if(state.isLoading){
-     CircularProgressIndicator()
+     CircularProgressIndicator(color = Orange)
     }else {
      Text(text = state.error ?: "",
       color = Color.White,

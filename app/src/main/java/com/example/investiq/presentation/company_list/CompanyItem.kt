@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.twotone.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,6 +28,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.investiq.domain.model.CompanyItem
+import com.example.investiq.ui.theme.CustomGreen
+import com.example.investiq.ui.theme.CustomRed
 import com.example.investiq.ui.theme.Gold
 import com.example.investiq.ui.theme.PurpleGrey40
 import com.example.investiq.ui.theme.poppins
@@ -40,8 +45,8 @@ fun CompanyItem(
 ){
 
     val save = SwipeAction(
-        icon = rememberVectorPainter(Icons.TwoTone.Star),
-        background = Color.Green,
+        icon = rememberVectorPainter(Icons.Filled.Star),
+        background = CustomGreen,
         onSwipe = {
 
         }
@@ -49,7 +54,7 @@ fun CompanyItem(
 
     val unsave = SwipeAction(
         icon = rememberVectorPainter(Icons.TwoTone.Star),
-        background = PurpleGrey40,
+        background = CustomRed,
         onSwipe = {
 
         }

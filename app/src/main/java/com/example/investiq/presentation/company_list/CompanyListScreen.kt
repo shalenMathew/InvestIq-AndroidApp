@@ -1,5 +1,6 @@
 package com.example.investiq.presentation.company_list
 
+import android.widget.Toast
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -55,8 +56,11 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -71,6 +75,7 @@ import com.example.investiq.R
 import com.example.investiq.presentation.destinations.CompanyInfoScreenDestination
 import com.example.investiq.ui.theme.Orange
 import com.example.investiq.ui.theme.PurpleGrey40
+import com.example.investiq.ui.theme.poppins
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.delay
@@ -84,6 +89,7 @@ fun CompanyListScreen(
     viewmodel:CompanyListingViewmodel = hiltViewModel(),
 ){
 
+
     var clickedSearch by remember {
         mutableStateOf(false)
     }
@@ -95,7 +101,7 @@ fun CompanyListScreen(
     val  pullRefreshState = rememberPullRefreshState(
         refreshing = viewmodel.state.isRefreshing ,
         onRefresh = {
-            viewmodel.getCompanyListing(fetchFromRemote = false) // make it true later
+            viewmodel.getCompanyListing(fetchFromRemote = true) // make it true later
         })
 
  val willRefresh by remember {
@@ -176,7 +182,7 @@ fun CompanyListScreen(
                         .fillMaxWidth()
                         .height(80.dp)){
 
-                       if (pullRefreshState.progress==0f){
+                       if (pullRefreshState.progress==0f) {
 
                            OutlinedTextField(  value = state.searchQuery ,
                                onValueChange = {value->
@@ -249,9 +255,9 @@ fun CompanyListScreen(
         if (state.isLoading){
             Box(modifier = Modifier
                 .wrapContentSize()
-                .background(color = Color.White)
+                .background(color = Color.Transparent)
                 .align(Alignment.Center)){
-                CircularProgressIndicator()
+                CircularProgressIndicator(color = Orange)
             }
         }
 
@@ -308,14 +314,15 @@ fun CustomIndicator(isRefreshing:Boolean,pullRefreshState:PullRefreshState){
                 // Spacer to create space between animation and text
                 Spacer(modifier = Modifier.height(2.dp))
                 // AnimatedLoadingText
-                AnimatedLoadingText()
+                AnimatedLoadingText(pullRefreshState)
             }
         }
     }
     }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AnimatedLoadingText() {
+fun AnimatedLoadingText(pullRefreshState:PullRefreshState) {
     var dotCount by remember { mutableStateOf(0) }
 
     LaunchedEffect(Unit) {
@@ -325,18 +332,37 @@ fun AnimatedLoadingText() {
         }
     }
 
-    Text(
-        buildAnnotatedString {
-            append("Refreshing")
-            repeat(dotCount) {
-                append(".")
-            }
-        },
-        modifier = Modifier.padding(top = 8.dp),
-        textAlign = TextAlign.Center,
-        color = Color.White,
-        fontSize = 15.sp,
-    )
+    if (pullRefreshState.progress in 0f..1f){
+        Text(
+            buildAnnotatedString {
+                append("Pull to Refresh ")
+                repeat(dotCount) {
+                    append(".")
+                }
+            },
+            modifier = Modifier.padding(top = 8.dp),
+            textAlign = TextAlign.Center,
+            fontFamily = poppins,
+            fontWeight = FontWeight.SemiBold,
+            color = Color.White,
+            fontSize = 15.sp,
+        )
+    }
+
+    if(pullRefreshState.progress>=1f){
+        Text(
+            buildAnnotatedString {
+                append("• Release •")
+            },
+            modifier = Modifier.padding(top = 8.dp),
+            textAlign = TextAlign.Center,
+            fontFamily = poppins,
+            fontWeight = FontWeight.SemiBold,
+            color = Color.White,
+            fontSize = 15.sp,
+        )
+    }
+
 }
 
 fun Modifier.animatedBorder
