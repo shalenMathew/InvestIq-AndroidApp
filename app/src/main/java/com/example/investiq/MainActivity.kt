@@ -28,15 +28,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.investiq.presentation.NavGraphs
+import com.example.investiq.presentation.company_info.CompanyInfoScreen
+import com.example.investiq.presentation.company_list.CompanyListScreen
 import com.example.investiq.presentation.company_list.bottomNav.BottomBarTab
 import com.example.investiq.presentation.company_list.bottomNav.BottomBarTabs
 import com.example.investiq.presentation.company_list.bottomNav.CustomBottomNavigation
 import com.example.investiq.ui.theme.InvestIQTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.haze
@@ -76,15 +78,21 @@ class MainActivity : ComponentActivity() {
                         .haze(
                             hazeState,
                             backgroundColor = MaterialTheme.colorScheme.background,
-                            tint = Color.Black.copy(alpha = .2f),
+                            tint =   if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S_V2){Color.Black.copy(alpha = .2f)}else{Color.Black.copy(alpha = 1f)},
                             blurRadius = 30.dp,
                         )
                         .fillMaxSize()) {
 
+
                         // will remove this nav
-                        DestinationsNavHost(navGraph = NavGraphs.root)
+//                        DestinationsNavHost(navGraph = NavGraphs.root)
 
+                        NavHost(navController = navController, startDestination = BottomBarTab.Home.name ) {
 
+                            composable(BottomBarTab.Home.name){ CompanyListScreen(navController) }
+                            composable(BottomBarTab.Favourites.name+"/{symbol}"){ CompanyInfoScreen() }
+
+                        }
 
                     }
 

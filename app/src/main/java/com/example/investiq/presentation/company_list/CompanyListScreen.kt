@@ -67,28 +67,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.investiq.R
-import com.example.investiq.presentation.destinations.CompanyInfoScreenDestination
+import com.example.investiq.presentation.company_list.bottomNav.BottomBarTab
 import com.example.investiq.ui.theme.Orange
 import com.example.investiq.ui.theme.PurpleGrey40
 import com.example.investiq.ui.theme.poppins
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
 @OptIn( ExperimentalMaterialApi::class)
 @Composable
-@Destination(start = true)
 fun CompanyListScreen(
-    navigator: DestinationsNavigator,
+    navigator: NavController,
     viewmodel:CompanyListingViewmodel = hiltViewModel(),
 ){
-
 
     var clickedSearch by remember {
         mutableStateOf(false)
@@ -227,7 +224,7 @@ fun CompanyListScreen(
                                     },
                                 company = companyItem,
                                 onClick = {
-                                    navigator.navigate(CompanyInfoScreenDestination(companyItem.symbol))
+                                    navigator.navigate(BottomBarTab.Favourites.name+"/${companyItem.symbol}")
                                 } )
                         }
                     }

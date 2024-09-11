@@ -33,12 +33,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.investiq.ui.theme.Orange
 import com.example.investiq.ui.theme.poppins
-import com.ramcosta.composedestinations.annotation.Destination
 
-@Destination
+
 @Composable
 fun CompanyInfoScreen(
- symbol:String,
  viewModel: CompanyInfoViewModel= hiltViewModel()
 ){
 

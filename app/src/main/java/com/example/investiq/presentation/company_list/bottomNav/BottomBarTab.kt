@@ -49,7 +49,9 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.PathMeasure
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -74,7 +76,7 @@ fun CustomBottomNavigation(hazeState: HazeState){
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
     Box(modifier = Modifier
-        .padding( horizontal = 64.dp, vertical = 50.dp)
+        .padding( horizontal = 64.dp, vertical = 30.dp)
         .fillMaxWidth()
         .height(75.dp)
         .hazeChild(state = hazeState,shape = CircleShape)
@@ -164,6 +166,8 @@ fun BottomBarTabs(
     onTabSelected: (BottomBarTab) -> Unit,
 ) {
 
+    val hapticFeedback = LocalHapticFeedback.current
+
     CompositionLocalProvider(
         LocalTextStyle provides LocalTextStyle.current.copy(
             fontSize = 12.sp,
@@ -197,6 +201,7 @@ fun BottomBarTabs(
                         .weight(1f)
                         .pointerInput(Unit) {
                             detectTapGestures {
+                                hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                                 onTabSelected(tab)
                             }
                         },
