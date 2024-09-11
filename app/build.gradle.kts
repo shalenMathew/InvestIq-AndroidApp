@@ -104,7 +104,7 @@ dependencies {
     implementation ("androidx.paging:paging-compose:3.3.0")
     implementation ("com.google.accompanist:accompanist-swiperefresh:0.24.2-alpha")
 
-    // Compose Nav Destinations
+//    // Compose Nav Destinations
     implementation ("io.github.raamcosta.compose-destinations:core:1.1.2-beta")
     ksp ("io.github.raamcosta.compose-destinations:ksp:1.1.2-beta")
 
@@ -138,6 +138,9 @@ dependencies {
 
     //lottie
     implementation("com.airbnb.android:lottie-compose:6.3.0")
+
+    // haxe effect
+    implementation("dev.chrisbanes.haze:haze-jetpack-compose:0.4.1")
 
 
 
