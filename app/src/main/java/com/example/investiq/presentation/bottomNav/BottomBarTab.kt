@@ -1,4 +1,4 @@
-package com.example.investiq.presentation.company_list.bottomNav
+package com.example.investiq.presentation.bottomNav
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
@@ -56,17 +56,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.investiq.ui.theme.Orange
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeChild
 
 sealed class BottomBarTab ( val name:String,val icon:ImageVector,val color:Color){
-    data object Home:BottomBarTab("Home", Icons.Rounded.Home,Color(0xFFF86529))
-    data object Favourites:BottomBarTab("Favourites",Icons.Rounded.Star,Color(0xFFADFF64))
+    data object Home: BottomBarTab("Home", Icons.Rounded.Home,Color(0xFFF86529))
+    data object Favourites: BottomBarTab("Favourites",Icons.Rounded.Star,Color(0xFFADFF64))
 }
 
 @Composable
-fun CustomBottomNavigation(hazeState: HazeState){
+fun CustomBottomNavigation(hazeState: HazeState,navigator:NavController){
 
     val tabs= listOf(
         BottomBarTab.Home,
@@ -88,6 +89,12 @@ fun CustomBottomNavigation(hazeState: HazeState){
     {
         BottomBarTabs(tabs,selectedTabIndex, onTabSelected = {
             selectedTabIndex = tabs.indexOf(it)
+            navigator.navigate(it.name){
+                popUpTo(navigator.graph.id){
+                    inclusive=true
+                }
+                launchSingleTop=true
+            }
         })
 
         val animatedSelectedTabIndex by animateFloatAsState(

@@ -3,28 +3,17 @@ package com.example.investiq
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -34,9 +23,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.investiq.presentation.company_info.CompanyInfoScreen
 import com.example.investiq.presentation.company_list.CompanyListScreen
-import com.example.investiq.presentation.company_list.bottomNav.BottomBarTab
-import com.example.investiq.presentation.company_list.bottomNav.BottomBarTabs
-import com.example.investiq.presentation.company_list.bottomNav.CustomBottomNavigation
+import com.example.investiq.presentation.bottomNav.BottomBarTab
+import com.example.investiq.presentation.bottomNav.CustomBottomNavigation
+import com.example.investiq.presentation.company_favourites.FavouriteCompanyScreen
+import com.example.investiq.presentation.screens.Screen
 import com.example.investiq.ui.theme.InvestIQTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,6 +46,7 @@ class MainActivity : ComponentActivity() {
                 val hazeState = remember { HazeState() }
 
                 val navController = rememberNavController()
+                val bottomNavController = rememberNavController()
 
                 Scaffold(modifier = Modifier.fillMaxSize()
                     .background(color = Color.White)
@@ -68,31 +59,33 @@ class MainActivity : ComponentActivity() {
                         val currentDestination = navBackStackEntry?.destination?.route
 
                         Log.d("DES",currentDestination ?:"Null")
-                        if (currentDestination.equals("Home")) {
-                            CustomBottomNavigation(hazeState)
+                        if (currentDestination.equals("Home") || currentDestination.equals("Favourites")) {
+                            CustomBottomNavigation(hazeState,navController)
                         }
                     }) { padding ->
-
 
                     Column(  Modifier
                         .haze(
                             hazeState,
                             backgroundColor = MaterialTheme.colorScheme.background,
-                            tint =   if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S_V2){Color.Black.copy(alpha = .2f)}else{Color.Black.copy(alpha = 1f)},
+                            tint =  Color.Black.copy(alpha = 1f),
                             blurRadius = 30.dp,
                         )
                         .fillMaxSize()) {
 
 
-                        // will remove this nav
-//                        DestinationsNavHost(navGraph = NavGraphs.root)
-
                         NavHost(navController = navController, startDestination = BottomBarTab.Home.name ) {
 
+                            composable(Screen.FavoritesScreen.route+"/{symbol}"){ CompanyInfoScreen() }
                             composable(BottomBarTab.Home.name){ CompanyListScreen(navController) }
-                            composable(BottomBarTab.Favourites.name+"/{symbol}"){ CompanyInfoScreen() }
+                            composable(BottomBarTab.Favourites.name){ FavouriteCompanyScreen() }
 
                         }
+
+//                        NavHost(navController=bottomNavController, startDestination =BottomBarTab.Home.name ){
+////                            composable(BottomBarTab.Home.name){ CompanyListScreen(navController) }
+////                            composable(BottomBarTab.Favourites.name){ FavouriteCompanyScreen() }
+//                        }
 
                     }
 

@@ -73,7 +73,8 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.investiq.R
-import com.example.investiq.presentation.company_list.bottomNav.BottomBarTab
+import com.example.investiq.presentation.bottomNav.BottomBarTab
+import com.example.investiq.presentation.screens.Screen
 import com.example.investiq.ui.theme.Orange
 import com.example.investiq.ui.theme.PurpleGrey40
 import com.example.investiq.ui.theme.poppins
@@ -224,7 +225,7 @@ fun CompanyListScreen(
                                     },
                                 company = companyItem,
                                 onClick = {
-                                    navigator.navigate(BottomBarTab.Favourites.name+"/${companyItem.symbol}")
+                                    navigator.navigate(Screen.FavoritesScreen.route+"/${companyItem.symbol}")
                                 } )
                         }
                     }
