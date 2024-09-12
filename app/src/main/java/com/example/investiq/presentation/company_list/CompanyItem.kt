@@ -64,7 +64,7 @@ fun CompanyItem(
     SwipeableActionsBox(
         startActions = listOf(unsave),
         endActions = listOf(save),
-        swipeThreshold = 100.dp
+        swipeThreshold = 65.dp
     ) {
 
         Box(
