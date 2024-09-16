@@ -79,7 +79,7 @@ fun StockChart(
             drawContext.canvas.nativeCanvas.apply {
                 drawText(
                     shortDayOfWeek,
-                    spacing + it*spacerPerWeek,
+                    spacing + (it*spacerPerWeek)+50,
                     size.height-5,
                     textPaint
                 )

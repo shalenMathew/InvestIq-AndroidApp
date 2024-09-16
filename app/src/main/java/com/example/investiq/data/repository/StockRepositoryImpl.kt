@@ -39,6 +39,7 @@ class StockRepositoryImpl @Inject constructor(
     ):Flow<Resource<List<CompanyItem>>> {
 
         return flow {
+
             emit(Resource.Loading(isLoading = true))
 
             // taking data from cache
@@ -63,18 +64,13 @@ class StockRepositoryImpl @Inject constructor(
                     it.toCompanyItem()
                 }))
 
-                return@flow
-                // return no need to fetch from api if the cache is not empty
+                return@flow // this will return only from flow not from entire function
+                // return from here coz , no need to fetch from api if the cache is not empty
             }
 
           val remoteListings =  try {
 
-              // old alha vantage api
-//                val remoteListing = stockApi.getStockList()
-//                companyListingParser.parse(remoteListing.byteStream())
-
              stockApi.getCompanyList()
-
 
             } catch(e: IOException) {
                 e.printStackTrace()
@@ -167,5 +163,6 @@ class StockRepositoryImpl @Inject constructor(
            Resource.Error(message = e.message.toString())
       }
     }
+
 
 }

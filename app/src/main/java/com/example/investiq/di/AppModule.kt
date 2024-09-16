@@ -2,8 +2,8 @@ package com.example.investiq.di
 
 import android.app.Application
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import com.example.investiq.constant.Constant
+import com.example.investiq.data.local.StockDao
 import com.example.investiq.data.local.StockDatabase
 import com.example.investiq.data.remote.StockApi
 import dagger.Module
@@ -31,15 +31,21 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providesIStockDatabase(application: Application):StockDatabase{
-
+    fun providesStockDatabase(application: Application):StockDatabase{
         return Room.databaseBuilder(
             application
             ,StockDatabase::class.java
             ,"stock_database")
             .fallbackToDestructiveMigration()
             .build()
-
     }
+
+
+    @Singleton
+    @Provides
+    fun providesDao(stockDatabase:StockDatabase):StockDao{
+        return stockDatabase.dao
+    }
+
 
 }

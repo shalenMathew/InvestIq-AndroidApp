@@ -1,6 +1,5 @@
 package com.example.investiq.presentation.company_list
 
-import android.widget.Toast
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -56,10 +55,8 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
@@ -73,7 +70,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.investiq.R
-import com.example.investiq.presentation.bottomNav.BottomBarTab
+import com.example.investiq.presentation.company_favorites.CompanyFavoriteViewModel
 import com.example.investiq.presentation.screens.Screen
 import com.example.investiq.ui.theme.Orange
 import com.example.investiq.ui.theme.PurpleGrey40
@@ -85,7 +82,8 @@ import kotlin.math.roundToInt
 @Composable
 fun CompanyListScreen(
     navigator: NavController,
-    viewmodel:CompanyListingViewmodel = hiltViewModel(),
+    companyListingViewmodel:CompanyListingViewmodel = hiltViewModel(),
+    companyFavoriteViewModel: CompanyFavoriteViewModel= hiltViewModel()
 ){
 
     var clickedSearch by remember {
@@ -94,12 +92,12 @@ fun CompanyListScreen(
 
     val progress by animateFloatAsState(targetValue = if(clickedSearch) 1f else 0f, label = "", animationSpec = tween(2000))
 
-    val state = viewmodel.state
+    val state = companyListingViewmodel.state
 
     val  pullRefreshState = rememberPullRefreshState(
-        refreshing = viewmodel.state.isRefreshing ,
+        refreshing = companyListingViewmodel.state.isRefreshing ,
         onRefresh = {
-            viewmodel.getCompanyListing(fetchFromRemote = true) // make it true later
+            companyListingViewmodel.getCompanyListing(fetchFromRemote = true) // make it true later
         })
 
  val willRefresh by remember {
@@ -137,7 +135,7 @@ fun CompanyListScreen(
                 hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
             }
 
-            !viewmodel.state.isRefreshing && pullRefreshState.progress > 0f -> {
+            !companyListingViewmodel.state.isRefreshing && pullRefreshState.progress > 0f -> {
                 hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
             }
         }
@@ -184,7 +182,7 @@ fun CompanyListScreen(
 
                            OutlinedTextField(  value = state.searchQuery ,
                                onValueChange = {value->
-                                   viewmodel.onEvent(CompanyListingEvent.OnSearchQueryChanged(value))
+                                   companyListingViewmodel.onEvent(CompanyListingEvent.OnSearchQueryChanged(value))
                                },
                                modifier = Modifier
                                    .padding(
@@ -224,9 +222,9 @@ fun CompanyListScreen(
                                             .toFloat()
                                     },
                                 company = companyItem,
-                                onClick = {
-                                    navigator.navigate(Screen.FavoritesScreen.route+"/${companyItem.symbol}")
-                                } )
+                                onClick = { navigator.navigate(Screen.FavoritesScreen.route+"/${companyItem.symbol}") } ,
+                                viewmodel = companyFavoriteViewModel
+                                )
                         }
                     }
                 }
@@ -259,7 +257,7 @@ fun CompanyListScreen(
             }
         }
 
-        CustomIndicator(viewmodel.state.isRefreshing,pullRefreshState)
+        CustomIndicator(companyListingViewmodel.state.isRefreshing,pullRefreshState)
 
     }
 }

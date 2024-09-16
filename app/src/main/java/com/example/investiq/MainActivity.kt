@@ -25,7 +25,7 @@ import com.example.investiq.presentation.company_info.CompanyInfoScreen
 import com.example.investiq.presentation.company_list.CompanyListScreen
 import com.example.investiq.presentation.bottomNav.BottomBarTab
 import com.example.investiq.presentation.bottomNav.CustomBottomNavigation
-import com.example.investiq.presentation.company_favourites.FavouriteCompanyScreen
+import com.example.investiq.presentation.company_favorites.FavouriteCompanyScreen
 import com.example.investiq.presentation.screens.Screen
 import com.example.investiq.ui.theme.InvestIQTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
                 val hazeState = remember { HazeState() }
 
                 val navController = rememberNavController()
-                val bottomNavController = rememberNavController()
+
 
                 Scaffold(modifier = Modifier.fillMaxSize()
                     .background(color = Color.White)
@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }) { padding ->
 
-                    Column(  Modifier
+                    Column( Modifier
                         .haze(
                             hazeState,
                             backgroundColor = MaterialTheme.colorScheme.background,
@@ -78,15 +78,9 @@ class MainActivity : ComponentActivity() {
 
                             composable(Screen.FavoritesScreen.route+"/{symbol}"){ CompanyInfoScreen() }
                             composable(BottomBarTab.Home.name){ CompanyListScreen(navController) }
-                            composable(BottomBarTab.Favourites.name){ FavouriteCompanyScreen() }
+                            composable(BottomBarTab.Favourites.name){ FavouriteCompanyScreen(navController) }
 
                         }
-
-//                        NavHost(navController=bottomNavController, startDestination =BottomBarTab.Home.name ){
-////                            composable(BottomBarTab.Home.name){ CompanyListScreen(navController) }
-////                            composable(BottomBarTab.Favourites.name){ FavouriteCompanyScreen() }
-//                        }
-
                     }
 
                 }
@@ -104,8 +98,6 @@ class MainActivity : ComponentActivity() {
             )
         }
     }
-
-
 }
 
 

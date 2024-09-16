@@ -35,7 +35,6 @@ var state by mutableStateOf(CompanyListingState())
                 when(it){
 
                     is Resource.Success->{
-
                         state = if (it.data.isNullOrEmpty()){
                             state.copy(isLoading = false,error="Nothing here to display... TRy to Refresh")
                         }else{
