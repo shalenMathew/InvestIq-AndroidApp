@@ -1,3 +1,3 @@
 # InvestIq - Android App 📈
 
-![App Screenshot](https://github.com/shalenMathew/NexBlock-CryptoApp/blob/master/images/crypto_banner.png)
+![App Screenshot](https://github.com/shalenMathew/InvestIq-AndroidApp/blob/master/images/investIQ_banner.png)
