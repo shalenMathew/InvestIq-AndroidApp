@@ -56,8 +56,6 @@ fun FavouriteCompanyScreen(
                     modifier = Modifier.padding(start = 12.dp, top = 12.dp, bottom = 12.dp),
                     fontSize = 25.sp)
             }
-
-
             if(state.data.isNotEmpty()){
 
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -87,8 +85,6 @@ fun FavouriteCompanyScreen(
                 }
 
             }
-
-
         }
 
     }
