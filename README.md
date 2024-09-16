@@ -1,1 +1,1 @@
-# InvestIq 
+# InvestIq - Android App
