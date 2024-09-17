@@ -1,7 +1,4 @@
 
-
-https://github.com/user-attachments/assets/1597b920-169c-45a6-8fa6-197f9eb76c26
-
 # InvestIq - Android App 📈
 
 ![App Screenshot](https://github.com/shalenMathew/InvestIq-AndroidApp/blob/master/images/banner.png)
@@ -36,4 +33,4 @@ Who are trying to find simpler projects to begin their contribution journey
 - Offline support
 
 ## App demo 📽️
-                              
+https://github.com/user-attachments/assets/1597b920-169c-45a6-8fa6-197f9eb76c26                              
