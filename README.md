@@ -32,4 +32,4 @@ Who are trying to find simpler projects to begin their contribution journey
 - Offline support
 
 ## App demo 📽️
-
+                              
