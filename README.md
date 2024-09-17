@@ -22,4 +22,11 @@ Who are trying to find simpler projects to begin their contribution journey
 - Hilt
 - Retrofit
 - Room
-  
+
+ ## Features ✨
+- Get the prices of stocks listed in NASDAQ
+- Get detailed info about particular stocks
+- Get weekly price graphs
+- Search functionalty
+- Can save ur favorites stocks in watchlist named 'Favorites'
+- Offline support
