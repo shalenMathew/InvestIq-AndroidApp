@@ -8,7 +8,7 @@
 
 This project will be best for you if ur someone who are looking to learn more about android development or
 
-Who are trying to find simpler projects to start contribution
+Who are trying to find simpler projects to begin contribution
 
 ## Built With 🛠
 - Kotlin
