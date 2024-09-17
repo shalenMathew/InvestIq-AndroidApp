@@ -30,3 +30,6 @@ Who are trying to find simpler projects to begin their contribution journey
 - Search functionalty
 - Can save ur favorites stocks in watchlist named 'Favorites'
 - Offline support
+
+## App demo 📽️
+
