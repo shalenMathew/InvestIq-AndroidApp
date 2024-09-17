@@ -1,3 +1,7 @@
+
+
+https://github.com/user-attachments/assets/1597b920-169c-45a6-8fa6-197f9eb76c26
+
 # InvestIq - Android App 📈
 
 ![App Screenshot](https://github.com/shalenMathew/InvestIq-AndroidApp/blob/master/images/banner.png)
