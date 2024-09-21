@@ -1,4 +1,6 @@
-HEY THERE THIS ARE SOME CONTRIBUTION GUIDELINES. You can contribute if you are looking to start your journey in open source this can be great starting point. Start by making small changes.
+## HEY THERE THIS ARE SOME CONTRIBUTION GUIDELINES.
+
+You can contribute if you are looking to start your journey in open source this can be great starting point. Start by making small changes.
 
 Once You become confident enough try to make some major changes in the app.
 
