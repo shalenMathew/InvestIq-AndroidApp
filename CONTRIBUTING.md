@@ -9,9 +9,9 @@ U can also raise issue if u encounter any bugs or have a suggestion for any new 
 In the end have fun with the project!!!
 
 ## Contributing:
-Open an issue regarding proposed change.
-If your proposed change is approved
-Fork this repo and implement the changes. 
-Open PR. Add description(optional) in PR. You're done!
+- Open an issue regarding proposed change.
+- If your proposed change is approved
+- Fork this repo and implement the changes. 
+- Open PR. Add description(optional) in PR. You're done!
 
 ## How to Build :
