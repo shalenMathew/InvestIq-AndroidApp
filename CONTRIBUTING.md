@@ -15,3 +15,5 @@ In the end have fun with the project!!!
 - Open PR. Add description(optional) in PR. You're done!
 
 ## How to Build :
+- Make sure to get ur api key from https://site.financialmodelingprep.com before forking the project
+-  then add ur key in local.propertid (e.g = fmpApiKey = "ur api key")
