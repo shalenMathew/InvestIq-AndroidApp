@@ -6,6 +6,12 @@ If your changes wont break the app, will merge your pull request.
 
 U can also raise issue if u encounter any bugs or have a suggestion for any new feature
 
-In the end have fun thats what matters!!!
+In the end have fun with the project!!!
 
-Contributing: Open an issue regarding proposed change. If your proposed change is approved, Fork this repo and do changes. Open PR. Add nice description in PR. You're done!
+## Contributing:
+Open an issue regarding proposed change.
+If your proposed change is approved
+Fork this repo and implement the changes. 
+Open PR. Add description(optional) in PR. You're done!
+
+## How to Build :
