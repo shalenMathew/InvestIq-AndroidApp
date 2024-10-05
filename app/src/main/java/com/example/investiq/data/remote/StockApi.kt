@@ -19,7 +19,7 @@ interface StockApi {
 
     @GET("query?function=TIME_SERIES_INTRADAY&interval=60min&datatype=csv")
     suspend fun getIntradayInfo(
-        @Query("symbol") symbol: String, @Query("apikey") apiKey: String = BuildConfig.API_KEY
+        @Query("symbol") symbol: String, @Query("apikey") apiKey: String = BuildConfig.FMP_API_KEY
     ): ResponseBody
 
     // Financial Modeling Prep api

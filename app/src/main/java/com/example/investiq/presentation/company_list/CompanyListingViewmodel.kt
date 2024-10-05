@@ -1,5 +1,6 @@
 package com.example.investiq.presentation.company_list
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -30,6 +31,8 @@ var state by mutableStateOf(CompanyListingState())
         fetchFromRemote:Boolean = false
     ){
         viewModelScope.launch {
+
+            Log.d("TAG",Thread.currentThread().name)
             stockRepository.getCompanyListing(fetchFromRemote, query).collect{
 
                 when(it){

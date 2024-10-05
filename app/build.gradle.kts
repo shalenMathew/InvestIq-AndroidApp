@@ -32,11 +32,8 @@ android {
         val properties = Properties().apply {
             load(project.rootProject.file("local.properties").inputStream())
         }
-
-        val apiKey = properties.getProperty("apiKey")
         val fmpApiKey = properties.getProperty("fmpApiKey")
 
-        buildConfigField("String", "API_KEY", apiKey)
         buildConfigField("String","FMP_API_KEY",fmpApiKey)
 
     }
