@@ -9,9 +9,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.investiq.domain.respository.StockRepository
 import com.example.investiq.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -30,30 +32,34 @@ var state by mutableStateOf(CompanyListingState())
         query:String = state.searchQuery.lowercase(),
         fetchFromRemote:Boolean = false
     ){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
 
             Log.d("TAG",Thread.currentThread().name)
             stockRepository.getCompanyListing(fetchFromRemote, query).collect{
 
-                when(it){
+                withContext(Dispatchers.Main){
 
-                    is Resource.Success->{
-                        state = if (it.data.isNullOrEmpty()){
-                            state.copy(isLoading = false,error="Nothing here to display... TRy to Refresh")
-                        }else{
-                            state.copy(isLoading = false,companyList = it.data, error = "")
+                    Log.d("TAG",Thread.currentThread().name)
+
+                    when(it){
+
+                        is Resource.Success->{
+                            state = if (it.data.isNullOrEmpty()){
+                                state.copy(isLoading = false,error="Nothing here to display... TRy to Refresh")
+                            }else{
+                                state.copy(isLoading = false,companyList = it.data, error = "")
+                            }
                         }
-                    }
-                    is Resource.Loading->{
-                        state=state.copy(isLoading = it.isLoading)
-                    }
+                        is Resource.Loading->{
+                            state=state.copy(isLoading = it.isLoading)
+                        }
 
-                    is Resource.Error-> {
-                        state=state.copy(error=it.message!!, isLoading = false)
-                    }
+                        is Resource.Error-> {
+                            state=state.copy(error=it.message!!, isLoading = false)
+                        }
 
+                    }
                 }
-
             }
         }
     }
