@@ -4,23 +4,21 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
 
-    id ("kotlin-kapt")
     id ("dagger.hilt.android.plugin")
     id ("kotlin-parcelize")
     id("com.google.devtools.ksp")
+    id("kotlin-kapt")
 }
-
-
 
 android {
 
     namespace = "com.example.investiq"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.investiq"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -54,18 +52,18 @@ android {
 
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
         buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
     packaging {
         resources {
@@ -83,7 +81,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation ("androidx.compose.material:material:1.6.8")
+    implementation ("androidx.compose.material:material:1.7.7")
     implementation(libs.androidx.material3.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -101,16 +99,13 @@ dependencies {
     implementation ("androidx.paging:paging-compose:3.3.0")
     implementation ("com.google.accompanist:accompanist-swiperefresh:0.24.2-alpha")
 
-//    // Compose Nav Destinations
-//    implementation ("io.github.raamcosta.compose-destinations:core:1.1.2-beta")
-//    ksp ("io.github.raamcosta.compose-destinations:ksp:1.1.2-beta")
 
     // Coil
     implementation ("io.coil-kt:coil-compose:2.4.0")
 
     //Dagger - Hilt
     implementation ("com.google.dagger:hilt-android:2.49")
-    kapt ("com.google.dagger:hilt-android-compiler:2.49")
+    ksp ("com.google.dagger:hilt-android-compiler:2.49")
     implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // Retrofit
@@ -121,7 +116,7 @@ dependencies {
 
     // Room
     implementation ("androidx.room:room-runtime:2.6.1")
-    kapt ("androidx.room:room-compiler:2.6.1")
+    ksp ("androidx.room:room-compiler:2.6.1")
 
     // Kotlin Extensions and Coroutines support for Room
     implementation ("androidx.room:room-ktx:2.6.1")
@@ -136,9 +131,7 @@ dependencies {
     //lottie
     implementation("com.airbnb.android:lottie-compose:6.3.0")
 
-    // haxe effect
+    // haze effect
     implementation("dev.chrisbanes.haze:haze-jetpack-compose:0.4.1")
-
-
 
 }

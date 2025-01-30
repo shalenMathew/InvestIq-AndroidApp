@@ -22,13 +22,10 @@ class FavCompanyRepositoryImpl @Inject constructor(private val dao:StockDao):Fav
     }
 
     override fun getAllFavCompany(): Flow<List<CompanyFavItem>>{
-
         return dao.getAllFavCompanyList().map { companyEntityList ->
             companyEntityList.map { item ->
                 item.toFavCompanyItem()
             }
         }
         }
-
-
     }

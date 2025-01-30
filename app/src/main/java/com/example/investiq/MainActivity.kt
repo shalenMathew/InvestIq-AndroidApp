@@ -1,5 +1,6 @@
 package com.example.investiq
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -68,7 +69,7 @@ class MainActivity : ComponentActivity() {
                         .haze(
                             hazeState,
                             backgroundColor = MaterialTheme.colorScheme.background,
-                            tint =  Color.Black.copy(alpha = 1f),
+                            tint = if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.S_V2) Color.Black.copy(alpha = .1f) else Color.Black.copy(alpha = 1f) ,
                             blurRadius = 30.dp,
                         )
                         .fillMaxSize()) {
