@@ -9,13 +9,14 @@
 
 This project will be best for you if ur someone who are looking to learn more about android development or
 
-Who are trying to find simpler projects to begin their contribution journey
+Who are looking for simpler projects to contribute to as they begin their open-source journey.
 
 ***Install the apk from here 👇***
 
 [![Static Badge](https://img.shields.io/badge/InvestIQ-Apk-Red?logo=android&color=red)](https://github.com/shalenMathew/InvestIq-AndroidApp/releases)
 
-
+## App demo 📽️
+https://github.com/user-attachments/assets/1597b920-169c-45a6-8fa6-197f9eb76c26  
 
 ## Built With 🛠
 - Kotlin
@@ -34,9 +35,6 @@ Who are trying to find simpler projects to begin their contribution journey
 - Search functionalty
 - Can save ur favorites stocks in watchlist named 'Favorites'
 - Offline support
-
-## App demo 📽️
-https://github.com/user-attachments/assets/1597b920-169c-45a6-8fa6-197f9eb76c26  
 
 ## Contribution 🤝
 - If your new to open source and want to play around with contribution you can do it here or u can raise issue if you want to make any improvements or fix any bugs
