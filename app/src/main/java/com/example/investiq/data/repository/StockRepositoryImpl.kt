@@ -68,6 +68,8 @@ class StockRepositoryImpl @Inject constructor(
                 // return from here coz , no need to fetch from api if the cache is not empty
             }
 
+            Log.d("FLOW","before api call")
+
           val remoteListings =  try {
 
              stockApi.getCompanyList()
@@ -89,16 +91,23 @@ class StockRepositoryImpl @Inject constructor(
               emit(Resource.Error(e.message ?: "unknown error occurred"))
               null
             }
-
+            Log.d("FLOW","after api call")
 
             // now caching the data we gotten from our api
 
+
+
+            // deleting existing data if any
             remoteListings?.let { listOfcompanyListing->
 
                 val sampleList = mutableListOf<CompanyItemDto>()
 
+                Log.d("FLOW","before delete")
+
                 dao.deleteAllCompanyListings()
                 // here down our insert fun in from data layer so should only take model from data layer
+
+                Log.d("FLOW","after delete delete")
 
            listOfcompanyListing.filter {
                it.exchangeShortName== "NASDAQ"
@@ -106,17 +115,28 @@ class StockRepositoryImpl @Inject constructor(
                    sampleList.add(item)
            }
 
+
+                Log.d("FLOW","LIST SIZE - ${sampleList.size}")
+                Log.d("FLOW","Before insert")
+                // inserting new data
                 dao.insertCompanyListing(
                 sampleList.map {
                     it.toCompanyItem().toCompanyListingEntity()
                 }
                 )
 
+                Log.d("FLOW","after insert")
+
+                Log.d("FLOW","before emit")
+
+                // emitting the data
                 emit(Resource.Success(
                     dao.searchForCompany("").map {
                         it.toCompanyItem()
                     }
                 ))
+
+                Log.d("FLOW","after emit")
 
                 emit(Resource.Loading(false))
 
@@ -124,7 +144,6 @@ class StockRepositoryImpl @Inject constructor(
         }
 
     }
-
 
 
     @RequiresApi(Build.VERSION_CODES.O)
