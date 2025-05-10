@@ -145,7 +145,6 @@ class StockRepositoryImpl @Inject constructor(
 
     }
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getIntraDayInfo(symbol: String): Resource<List<IntraDayInfo>> {
 

@@ -1,22 +1,19 @@
 package com.example.investiq.presentation.company_list
 
+
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.twotone.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,7 +33,6 @@ import com.example.investiq.presentation.company_favorites.CompanyFavoriteViewMo
 import com.example.investiq.ui.theme.CustomGreen
 import com.example.investiq.ui.theme.CustomRed
 import com.example.investiq.ui.theme.Gold
-import com.example.investiq.ui.theme.PurpleGrey40
 import com.example.investiq.ui.theme.poppins
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
