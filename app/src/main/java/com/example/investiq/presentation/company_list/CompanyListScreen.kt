@@ -97,7 +97,7 @@ fun CompanyListScreen(
     val  pullRefreshState = rememberPullRefreshState(
         refreshing = companyListingViewmodel.state.isRefreshing ,
         onRefresh = {
-            companyListingViewmodel.getCompanyListing(fetchFromRemote = true) // make it true later
+            companyListingViewmodel.getCompanyListing(fetchFromRemote = true)
         })
 
  val willRefresh by remember {
@@ -198,12 +198,13 @@ fun CompanyListScreen(
                                    .animatedBorder({ progress }, Orange, Color.Black),
                                maxLines = 1,
                                placeholder = { Text(text = "Search...")}
-                               , colors = TextFieldDefaults. outlinedTextFieldColors(
+                               , colors = TextFieldDefaults.outlinedTextFieldColors(
                                    focusedBorderColor =Color.Transparent,
                                    unfocusedBorderColor = PurpleGrey40 ,
                                    placeholderColor = Color.Black,
                                    disabledPlaceholderColor = Color.Yellow),
-                               shape = MaterialTheme.shapes.extraLarge)
+                               shape = MaterialTheme.shapes.extraLarge
+                           )
 
                        }
 

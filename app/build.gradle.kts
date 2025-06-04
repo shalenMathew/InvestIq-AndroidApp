@@ -81,7 +81,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation ("androidx.compose.material:material:1.7.7")
+    implementation ("androidx.compose.material:material:1.7.7") //
     implementation(libs.androidx.material3.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -125,7 +125,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
 
 
-    // Swipe item
+    // Swipe item to delete
     implementation ("me.saket.swipe:swipe:1.3.0")
 
     //lottie
